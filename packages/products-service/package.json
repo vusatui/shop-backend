@@ -7,8 +7,12 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "sls:deploy": "sls deploy",
     "sls:run:local:getProductsList": "serverless invoke local --function getProductsList",
-    "sls:run:local:getProductById": "serverless invoke local --function getProductById --path ./get-product-by-id-context.json"
+    "sls:run:local:getProductById": "serverless invoke local --function getProductById --path mocks/get-product-by-id-context.json",
+    "sls:run:local:getProductById:withError": "serverless invoke local --function getProductById --path mocks/get-product-by-id-with-error-context.json"
   },
   "author": "anton_vusatyi@epam.com",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "serverless-webpack": "^5.7.1"
+  }
 }
