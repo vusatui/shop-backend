@@ -1,0 +1,14 @@
+{
+  "name": "products-service",
+  "version": "1.0.0",
+  "description": "Products service made on top of AWS Lambda Functions.",
+  "main": "handler.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "sls:deploy": "sls deploy",
+    "sls:run:local:getProductsList": "serverless invoke local --function getProductsList",
+    "sls:run:local:getProductById": "serverless invoke local --function getProductById --path ./get-product-by-id-context.json"
+  },
+  "author": "anton_vusatyi@epam.com",
+  "license": "MIT"
+}
