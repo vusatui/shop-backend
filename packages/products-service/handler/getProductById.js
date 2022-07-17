@@ -13,7 +13,6 @@ export default async (event) => {
             statusCode: 200,
             body: stringify({
                 item: productService.getProductById(productId),
-                input: event,
             })
         }
     } catch (e) {

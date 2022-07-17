@@ -3,10 +3,9 @@ import stringify from "../util/stringify";
 
 const productService = ProductsService.getInstance();
 
-export default async (event) => ({
+export default async () => ({
     statusCode: 200,
     body: stringify({
             items: productService.getProductList(),
-            input: event,
         }),
 });
