@@ -1,4 +1,3 @@
-import "source-map-support/register";
 import { APIGatewayEvent, APIGatewayProxyEventPathParameters } from 'aws-lambda';
 
 

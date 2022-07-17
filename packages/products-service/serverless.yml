@@ -22,7 +22,7 @@ frameworkVersion: '3'
 
 custom:
   webpack:
-    webpackConfig: ../webpack.config.js
+    includeModules: true
   documentation:
     version: '1'
     title: 'Products service API'
@@ -43,7 +43,7 @@ provider:
   region: us-east-1
 
 plugins:
-  - serverless-plugin-typescript
+#  - serverless-plugin-typescript
   - serverless-webpack
   - serverless-offline
 
@@ -84,19 +84,6 @@ functions:
       - httpApi:
           path: /products/{id}
           method: get
-          documentation:
-            summary: "Retrieving all products"
-            pathParams:
-              - name: "id"
-                desctiption: "UUID of specific product"
-                schema:
-                  type: "string"
-            methodResponses:
-              - statusCode: 200
-                responseBody:
-                  description: "Product"
-                responseModels:
-                  "application/json": "Product"
 
   getProductsList:
     handler: handler.getProductsList

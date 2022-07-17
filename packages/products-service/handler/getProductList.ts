@@ -1,5 +1,3 @@
-import "source-map-support/register";
-
 import { Container } from "typedi";
 
 import ProductsService from "../service/ProductsService";
