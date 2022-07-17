@@ -20,6 +20,18 @@ service: products-service
 # Check out our docs for more details
 frameworkVersion: '3'
 
+custom:
+  documentation:
+    version: '1'
+    title: 'Products service API'
+    description: 'This is documentation for Product service API'
+    models:
+      - name: "Product"
+        description: "Product from the Store"
+        contentType: "application/json"
+        schema: ${file(open-api/Product.json)}
+
+
 provider:
   name: aws
   runtime: nodejs12.x
@@ -29,7 +41,9 @@ provider:
   region: us-east-1
 
 plugins:
+  - serverless-openapi-documentation
   - serverless-webpack
+  - serverless-offline
 
 # you can add statements to the Lambda function's IAM Role here
 #  iam:
@@ -68,6 +82,22 @@ functions:
       - httpApi:
           path: /products/{id}
           method: get
+      - http:
+          path: "/products/{id}"
+          method: "get"
+          documentation:
+            summary: "Retrieving all products"
+            pathParams:
+              - name: "id"
+                desctiption: "UUID of specific product"
+                schema:
+                  type: "string"
+            methodResponses:
+              - statusCode: 200
+                responseBody:
+                  description: "Product"
+                responseModels:
+                  application/json:"Product"
 
   getProductsList:
     handler: handler.getProductsList
