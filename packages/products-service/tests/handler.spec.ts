@@ -1,5 +1,7 @@
 import productList from "../mocks/product-list.json";
 
+import { APIGatewayProxyEvent } from "aws-lambda";
+
 import getProductList from "../handler/getProductList";
 import stringify from "../util/stringify";
 import getProductById from "../handler/getProductById";
@@ -18,7 +20,7 @@ describe("Running test for 'product-service' handlers", () => {
           },
         };
 
-        expect(await getProductById(event)).toStrictEqual({  statusCode: 404, body: stringify({ message: "Product not found!" }),  });
+        expect(await getProductById(event as unknown as APIGatewayProxyEvent)).toStrictEqual({  statusCode: 404, body: stringify({ message: "Product not found!" }),  });
     });
 
     it("getProductById: product successfully found", async() => {
@@ -30,6 +32,6 @@ describe("Running test for 'product-service' handlers", () => {
           },
         };
 
-        expect(await getProductById(event)).toStrictEqual({  statusCode: 200, body: stringify({ item: product }),  });
+        expect(await getProductById(event as unknown as APIGatewayProxyEvent)).toStrictEqual({  statusCode: 200, body: stringify({ item: product }),  });
     });
 });

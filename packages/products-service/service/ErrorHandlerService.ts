@@ -1,12 +1,13 @@
 import ProductNotFoundError from "../error/ProductNotFoundError";
-import Singleton from "../auxiliary/Singleton";
 import stringify from "../util/stringify";
+import { Service } from "typedi";
 
-export default class ErrorHandlerService extends Singleton {
+@Service()
+export default class ErrorHandlerService {
 
-    static _badRequestErrorMessage = "Bad request!";
+    private static badRequestErrorMessage: string = "Bad request!";
 
-    handleError(error) {
+    handleError(error: Error) {
         if (error instanceof ProductNotFoundError) {
             return {
                 statusCode: 404,
@@ -16,11 +17,14 @@ export default class ErrorHandlerService extends Singleton {
             };
         }
 
+        return ErrorHandlerService.getBadRequestResponse();
+    }
 
+    static getBadRequestResponse() {
         return {
             statusCode: 400,
             body: stringify({
-                message: ErrorHandlerService._badRequestErrorMessage,
+                message: ErrorHandlerService.badRequestErrorMessage,
             }),
         };
     }
