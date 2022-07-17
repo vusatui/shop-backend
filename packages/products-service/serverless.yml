@@ -27,10 +27,12 @@ custom:
 provider:
   name: aws
   runtime: nodejs12.x
+  httpApi:
+    cors: true
 
 # you can overwrite defaults here
   stage: dev
-  region: us-east-1
+  region: eu-west-1
 
 plugins:
 #  - serverless-plugin-typescript
