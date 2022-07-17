@@ -23,16 +23,6 @@ frameworkVersion: '3'
 custom:
   webpack:
     includeModules: true
-  documentation:
-    version: '1'
-    title: 'Products service API'
-    description: 'This is documentation for Product service API'
-    models:
-      - name: "Product"
-        description: "Product from the Store"
-        contentType: "application/json"
-        schema: ${file(open-api/Product.json)}
-
 
 provider:
   name: aws
