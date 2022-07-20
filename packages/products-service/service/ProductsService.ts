@@ -1,6 +1,6 @@
 import productsList from "../mocks/product-list.json";
 import ProductNotFoundError from "../error/ProductNotFoundError";
-import { Product } from "../types/Product";
+import { Product } from "../types/product";
 import { Service } from "typedi";
 
 @Service()

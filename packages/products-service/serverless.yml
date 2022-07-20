@@ -23,6 +23,12 @@ frameworkVersion: '3'
 custom:
   webpack:
     includeModules: true
+  autoswagger:
+    title: 'products-service'
+    apiType: 'httpApi'
+    typefiles: [ './types/product.d.ts' ]
+    swaggerPath: 'swagger-ui'
+    schemes: [ 'https' ]
 
 provider:
   name: aws
@@ -36,8 +42,10 @@ provider:
 
 plugins:
 #  - serverless-plugin-typescript
+  - serverless-auto-swagger
   - serverless-webpack
   - serverless-offline
+
 
 # you can add statements to the Lambda function's IAM Role here
 #  iam:
@@ -76,6 +84,16 @@ functions:
       - httpApi:
           path: /products/{id}
           method: get
+          summary: "Get product by id"
+          description: "Returns product by provided id"
+          queryStringParameters:
+            id:
+              required: true
+              type: 'string'
+              description: 'Product id'
+          responseData:
+            200:
+              bodyType: 'Product'
 
   getProductsList:
     handler: handler.getProductsList
@@ -86,6 +104,11 @@ functions:
       - httpApi:
           path: /products
           method: get
+          summary: "Get list of products"
+          description: "Returns all products"
+          responseData:
+            200:
+              bodyType: 'Product[]'
 #      - websocket: $connect
 #      - s3: ${env:BUCKET}
 #      - schedule: rate(10 minutes)
