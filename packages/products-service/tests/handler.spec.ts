@@ -5,9 +5,17 @@ import { APIGatewayProxyEvent } from "aws-lambda";
 import getProductList from "../handler/getProductList";
 import stringify from "../util/stringify";
 import getProductById from "../handler/getProductById";
+import ProductsRepository from "../repository/ProductsRepository";
+
+
 
 
 describe("Running test for 'product-service' handlers", () => {
+
+    beforeAll(() => {
+        ProductsRepository.prototype.getProducts = jest.fn(() => Promise.resolve(productList));
+        ProductsRepository.prototype.getProductById = jest.fn((id: string) => Promise.resolve(productList.find(p => p.id === id)));
+    })
 
     it("getProductList", async () => {
         expect(await getProductList()).toStrictEqual({ statusCode: 200, body: stringify({ items: productList }) });

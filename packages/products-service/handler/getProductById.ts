@@ -21,7 +21,7 @@ export default async (event: APIGatewayEvent) => {
         return {
             statusCode: 200,
             body: stringify({
-                item: productService.getProductById(productId),
+                item: await productService.getProductById(productId),
             }),
         };
     } catch (e) {

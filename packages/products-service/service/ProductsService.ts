@@ -1,19 +1,21 @@
-import productsList from "../mocks/product-list.json";
-import ProductNotFoundError from "../error/ProductNotFoundError";
-import { Product } from "../types/product";
 import { Service } from "typedi";
+
+import ProductNotFoundError from "../error/ProductNotFoundError";
+import ProductsRepository from "../repository/ProductsRepository";
 
 @Service()
 export default class ProductsService {
 
-    private static products: Product[] = productsList;
+    constructor(
+        private readonly productsRepository: ProductsRepository
+    ) {}
 
-    getProductList() {
-        return ProductsService.products;
+    async getProductList() {
+        return this.productsRepository.getProducts();
     }
 
-    getProductById(id: string) {
-        const product = ProductsService.products.find(({ id: productId }) => id === productId);
+    async getProductById(id: string) {
+        const product = await this.productsRepository.getProductById(id);
 
         if (product === undefined) {
             throw new ProductNotFoundError();

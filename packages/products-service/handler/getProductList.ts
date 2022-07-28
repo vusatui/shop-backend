@@ -8,6 +8,6 @@ const productService = Container.get(ProductsService);
 export default async () => ({
     statusCode: 200,
     body: stringify({
-            items: productService.getProductList(),
+            items: await productService.getProductList(),
         }),
 });
