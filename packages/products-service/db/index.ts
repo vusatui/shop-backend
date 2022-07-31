@@ -18,7 +18,7 @@ const client = new Client({
     connectionTimeoutMillis: 60 * 1000
 });
 
-client.connect().catch(console.error);
+client.connect().then(() => console.log("Database was connected")).catch(console.error);
 
 @Service()
 export default class Database {

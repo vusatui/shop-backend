@@ -21,11 +21,25 @@ provider:
     cors: true
   stage: dev
   region: eu-west-1
+  environment:
+    PG_HOST: ${env:PG_HOST}
+    PG_PORT: ${env:PG_PORT}
+    PG_DATABASE: ${env:PG_DATABASE}
+    PG_USERNAME: ${env:PG_USERNAME}
+    PG_PASSWORD: ${env:PG_PASSWORD}
+  vpc:
+    securityGroupIds:
+      - sg-0638cef869c004839
+    subnetIds:
+      - subnet-0a253c49dd5b01847
+      - subnet-042df5f146ec75e75
+      - subnet-09b897b8965f500ec
 
 plugins:
   - serverless-auto-swagger
   - serverless-webpack
   - serverless-offline
+
 
 functions:
   getProductById:
