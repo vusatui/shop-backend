@@ -9,16 +9,15 @@ custom:
     includeModules: true
   autoswagger:
     title: 'products-service'
-    apiType: 'httpApi'
+    basePath: '/dev'
+    apiType: 'http'
     typefiles: [ './types/product.d.ts' ]
     swaggerPath: 'swagger-ui'
-    schemes: [ 'http' ]
+    schemes: [ 'http', 'https' ]
 
 provider:
   name: aws
   runtime: nodejs12.x
-  httpApi:
-    cors: true
   stage: dev
   region: eu-west-1
   environment:
@@ -40,14 +39,14 @@ plugins:
   - serverless-webpack
   - serverless-offline
 
-
 functions:
   getProductById:
     handler: handler.getProductById
     events:
-      - httpApi:
+      - http:
           path: /products/{id}
-          method: get
+          method: GET
+          cors: true
           summary: "Get product by id"
           description: "Returns product by provided id"
           queryStringParameters:
@@ -62,24 +61,23 @@ functions:
   getProductsList:
     handler: handler.getProductsList
     events:
-      - httpApi:
+      - http:
           path: /products
-          method: get
+          method: GET
+          cors: true
           summary: "Get list of products"
           description: "Returns all products"
           responseData:
             200:
-              bodyType: 'Product[]'
+              bodyType: '[Product]'
 
   createProduct:
     handler: handler.createProduct
     events:
-      - httpApi:
+      - http:
           path: /products
-          method: post
+          method: POST
+          cors: true
           summary: "Create product"
           description: "Create a new product with initial stock count"
           bodyType: 'Product'
-          responseData:
-            200:
-              bodyType: '{ id: string }'

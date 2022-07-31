@@ -58,7 +58,7 @@
           "200": {
             "description": "200 response",
             "schema": {
-              "$ref": "#/definitions/Product[]"
+              "$ref": "#/definitions/[Product]"
             }
           }
         }
@@ -86,10 +86,7 @@
         ],
         "responses": {
           "200": {
-            "description": "200 response",
-            "schema": {
-              "$ref": "#/definitions/{ id: string }"
-            }
+            "description": "200 response"
           }
         }
       }
@@ -131,7 +128,9 @@
     }
   },
   "securityDefinitions": {},
+  "basePath": "/dev",
   "schemes": [
-    "http"
+    "http",
+    "https"
   ]
 };
