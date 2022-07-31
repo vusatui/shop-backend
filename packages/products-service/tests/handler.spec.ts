@@ -19,7 +19,7 @@ describe("Running test for 'product-service' handlers", () => {
     })
 
     it("getProductList", async () => {
-        expect(await getProductList({} as unknown as APIGatewayProxyEventV2, context)).toStrictEqual({ statusCode: 200, body: stringify({ items: productList }) });
+        expect(await getProductList({} as unknown as APIGatewayProxyEventV2, context)).toStrictEqual({ statusCode: 200, headers: {}, body: stringify({ items: productList }) });
     });
 
     it("getProductById: product not found", async() => {
@@ -29,7 +29,7 @@ describe("Running test for 'product-service' handlers", () => {
           },
         };
 
-        expect(await getProductById(event as unknown as APIGatewayProxyEventV2, context)).toStrictEqual({  statusCode: 404, body: stringify({ message: "Product not found!" }),  });
+        expect(await getProductById(event as unknown as APIGatewayProxyEventV2, context)).toStrictEqual({  statusCode: 404, headers: {}, body: stringify({ message: "Product not found!" }),  });
     });
 
     it("getProductById: product successfully found", async() => {
@@ -41,6 +41,6 @@ describe("Running test for 'product-service' handlers", () => {
           },
         };
 
-        expect(await getProductById(event as unknown as APIGatewayProxyEventV2, context)).toStrictEqual({  statusCode: 200, body: stringify({ item: product }),  });
+        expect(await getProductById(event as unknown as APIGatewayProxyEventV2, context)).toStrictEqual({  statusCode: 200, headers: {}, body: stringify({ item: product }),  });
     });
 });

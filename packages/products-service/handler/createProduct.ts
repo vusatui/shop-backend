@@ -10,12 +10,13 @@ import { Product } from "../types/product";
 import ProductValidator from "../validator/ProductValidator";
 import stringify from "../util/stringify";
 import iterceptError from "../middleware/interceptError";
+import cors from "../middleware/cors";
 
 const productService = Container.get(ProductsService)
 const productValidator = Container.get(ProductValidator)
 const errorHandlerService = Container.get(ErrorHandlerService)
 
-export default iterceptError(logRequest(async (event: APIGatewayProxyEventV2) => {
+export default cors(iterceptError(logRequest(async (event: APIGatewayProxyEventV2) => {
     try {
         const product: Product = parseJson(event.body || "");
 
@@ -30,4 +31,4 @@ export default iterceptError(logRequest(async (event: APIGatewayProxyEventV2) =>
     } catch (e) {
         return errorHandlerService.handleError(e as Error);
     }
-}));
+})));

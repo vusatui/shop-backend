@@ -8,11 +8,12 @@ import ErrorHandlerService from "../service/ErrorHandlerService";
 import stringify from "../util/stringify";
 import logRequest from "../middleware/logRequest";
 import iterceptError from "../middleware/interceptError";
+import cors from "../middleware/cors";
 
 const productService = Container.get(ProductsService);
 const errorHandlerService =  Container.get(ErrorHandlerService);
 
-export default iterceptError(logRequest(async (event: APIGatewayProxyEventV2) => {
+export default cors(iterceptError(logRequest(async (event: APIGatewayProxyEventV2) => {
     const { id: productId } = event.pathParameters as APIGatewayProxyEventPathParameters;
 
     if (productId === undefined) {
@@ -29,4 +30,4 @@ export default iterceptError(logRequest(async (event: APIGatewayProxyEventV2) =>
     } catch (e) {
         return errorHandlerService.handleError(e as Error);
     }
-}));
+})));
