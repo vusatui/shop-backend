@@ -56,4 +56,25 @@ export default class ProductsRepository {
             throw new InternalServerError();
         }
     }
+
+    async createProduct(product: Product) {
+        try {
+            await this.database.query("BEGIN");
+
+            const queryText = "INSERT INTO products(title, description, price) VALUES($1, $2, $3) RETURNING id";
+            const productValues = [product.title, product.description, product.price];
+            const res = await this.database.query<{id: string}>(queryText, productValues);
+            const productId = res.rows[0].id;
+            const querySetStock = "INSERT INTO stocks(product_id, count) VALUES ($1, $2)"
+            const stockValues = [productId, product.count];
+            await this.database.query(querySetStock, stockValues);
+
+            await this.database.query("COMMIT");
+
+            return productId;
+        } catch (e) {
+            await this.database.query("ROLLBACK");
+            throw e
+        }
+    }
 }

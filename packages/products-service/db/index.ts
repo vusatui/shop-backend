@@ -23,7 +23,7 @@ client.connect().catch(console.error);
 @Service()
 export default class Database {
 
-    query<T>(text: string, params: any[]): Promise<QueryResult<T>>  {
+    query<T>(text: string, params?: any[]): Promise<QueryResult<T>>  {
         return client.query(text, params);
     }
 }

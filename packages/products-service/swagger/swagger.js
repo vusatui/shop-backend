@@ -62,6 +62,36 @@
             }
           }
         }
+      },
+      "post": {
+        "summary": "Create product",
+        "description": "Create a new product with initial stock count",
+        "operationId": "createProduct.post./products",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Body required in the request",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Product"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/{ id: string }"
+            }
+          }
+        }
       }
     }
   },
@@ -90,7 +120,6 @@
         }
       },
       "required": [
-        "id",
         "title",
         "description",
         "price",
@@ -103,6 +132,6 @@
   },
   "securityDefinitions": {},
   "schemes": [
-    "https"
+    "http"
   ]
 };

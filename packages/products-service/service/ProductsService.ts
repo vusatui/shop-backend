@@ -2,6 +2,7 @@ import { Service } from "typedi";
 
 import ProductNotFoundError from "../error/ProductNotFoundError";
 import ProductsRepository from "../repository/ProductsRepository";
+import { Product } from "../types/product";
 
 @Service()
 export default class ProductsService {
@@ -22,5 +23,9 @@ export default class ProductsService {
         }
 
         return product;
+    }
+
+    async createProduct(product: Product) {
+        return this.productsRepository.createProduct(product);
     }
 }
