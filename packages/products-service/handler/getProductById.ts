@@ -1,4 +1,4 @@
-import { APIGatewayEvent, APIGatewayProxyEventPathParameters } from 'aws-lambda';
+import { APIGatewayProxyEventPathParameters, APIGatewayProxyEventV2 } from 'aws-lambda';
 
 
 import { Container } from "typedi";
@@ -6,11 +6,12 @@ import { Container } from "typedi";
 import ProductsService from "../service/ProductsService";
 import ErrorHandlerService from "../service/ErrorHandlerService";
 import stringify from "../util/stringify";
+import logRequest from "../middleware/logRequest";
 
 const productService = Container.get(ProductsService);
 const errorHandlerService =  Container.get(ErrorHandlerService);
 
-export default async (event: APIGatewayEvent) => {
+export default logRequest(async (event: APIGatewayProxyEventV2) => {
     const { id: productId } = event.pathParameters as APIGatewayProxyEventPathParameters;
 
     if (productId === undefined) {
@@ -27,4 +28,4 @@ export default async (event: APIGatewayEvent) => {
     } catch (e) {
         return errorHandlerService.handleError(e as Error);
     }
-};
+});

@@ -15,6 +15,7 @@ const client = new Client({
     database: PG_DATABASE,
     password: PG_PASSWORD,
     port: Number(PG_PORT) || 5432,
+    connectionTimeoutMillis: 60 * 1000
 });
 
 client.connect().catch(console.error);

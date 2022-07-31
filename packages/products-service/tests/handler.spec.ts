@@ -1,6 +1,6 @@
 import productList from "../mocks/product-list.json";
 
-import { APIGatewayProxyEvent } from "aws-lambda";
+import { APIGatewayProxyEventV2, Context } from "aws-lambda";
 
 import getProductList from "../handler/getProductList";
 import stringify from "../util/stringify";
@@ -11,6 +11,7 @@ import ProductsRepository from "../repository/ProductsRepository";
 
 
 describe("Running test for 'product-service' handlers", () => {
+    let context: Context;
 
     beforeAll(() => {
         ProductsRepository.prototype.getProducts = jest.fn(() => Promise.resolve(productList));
@@ -18,7 +19,7 @@ describe("Running test for 'product-service' handlers", () => {
     })
 
     it("getProductList", async () => {
-        expect(await getProductList()).toStrictEqual({ statusCode: 200, body: stringify({ items: productList }) });
+        expect(await getProductList({} as unknown as APIGatewayProxyEventV2, context)).toStrictEqual({ statusCode: 200, body: stringify({ items: productList }) });
     });
 
     it("getProductById: product not found", async() => {
@@ -28,7 +29,7 @@ describe("Running test for 'product-service' handlers", () => {
           },
         };
 
-        expect(await getProductById(event as unknown as APIGatewayProxyEvent)).toStrictEqual({  statusCode: 404, body: stringify({ message: "Product not found!" }),  });
+        expect(await getProductById(event as unknown as APIGatewayProxyEventV2, context)).toStrictEqual({  statusCode: 404, body: stringify({ message: "Product not found!" }),  });
     });
 
     it("getProductById: product successfully found", async() => {
@@ -40,6 +41,6 @@ describe("Running test for 'product-service' handlers", () => {
           },
         };
 
-        expect(await getProductById(event as unknown as APIGatewayProxyEvent)).toStrictEqual({  statusCode: 200, body: stringify({ item: product }),  });
+        expect(await getProductById(event as unknown as APIGatewayProxyEventV2, context)).toStrictEqual({  statusCode: 200, body: stringify({ item: product }),  });
     });
 });
