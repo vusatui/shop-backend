@@ -17,6 +17,11 @@ export default (handler: LambdaHandler): LambdaHandler => async (event, context)
             'Access-Control-Allow-Origin': origin,
             'Access-Control-Allow-Credentials': true,
         };
+    } else {
+        headers = {
+            ...headers,
+            'Access-Control-Allow-Origin': '*',
+        };
     }
 
     return {

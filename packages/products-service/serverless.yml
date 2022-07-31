@@ -18,8 +18,7 @@ provider:
   name: aws
   runtime: nodejs12.x
   httpApi:
-    cors:
-      
+    cors: true
   stage: dev
   region: eu-west-1
   environment:
