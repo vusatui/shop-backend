@@ -1,14 +1,33 @@
-import { formatJSONResponse, ValidatedEventAPIGatewayProxyEvent } from "@libs/api-gateway";
+import {S3} from 'aws-sdk'
+import cors from '@middy/http-cors'
+import {formatJSONResponse} from "@libs/api-gateway";
 
 import middy from "@middy/core";
-import schema from './schema';
+import {AWS_REGION, CORS_ORIGINS, S3_UPLOADS_BUCKET_NAME} from "../../constants";
+import {APIGatewayProxyEventV2, Handler} from "aws-lambda";
 
-const importProductsFile: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) => {
-    const { name } = event.queryStringParameters;
+const importProductsFile: Handler = async (event: APIGatewayProxyEventV2) => {
+    const {name} = event.queryStringParameters;
 
+    const s3 = new S3({
+        region: AWS_REGION,
+        signatureVersion: 'v4',
+    });
 
+    const params = {
+        Bucket: S3_UPLOADS_BUCKET_NAME,
+        Expires: 3600 * 10,
+        Key: `uploads/${name}`,
+    }
 
-    return formatJSONResponse(name);
+    const signedUrl = await s3.getSignedUrlPromise('putObject', params);
+
+    console.log(signedUrl);
+
+    return formatJSONResponse(signedUrl);
 };
 
-export const main = middy(importProductsFile);
+export const main = middy(importProductsFile).use(cors({
+    origins: CORS_ORIGINS,
+    credentials: true,
+}));

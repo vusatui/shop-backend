@@ -1,4 +1,5 @@
 import { handlerPath } from "@libs/handler-resolver";
+import {CORS_ORIGINS} from "../../constants";
 
 export default {
     handler: `${handlerPath(__dirname)}/handler.main`,
@@ -7,18 +8,17 @@ export default {
             http: {
                 method: "get",
                 path: "import",
-                cors: true,
+                cors: {
+                    origins: CORS_ORIGINS,
+                },
                 description: "Uploads files to S3",
-                inputType: 'string',
-                // consumes: ['multipart/form-data'],
-                // parameters: [
-                //     {
-                //         in: 'formData',
-                //         name: 'upfile',
-                //         type: 'file',
-                //         description: 'The file to upload.',
-                //     }
-                // ]
+                queryStringParameters: {
+                    name: {
+                        required: true,
+                        type: 'string',
+                        description: 'Name of the uploading file.',
+                    },
+                },
             }
         }
     ]

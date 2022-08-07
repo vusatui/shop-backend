@@ -7,10 +7,10 @@
   },
   "paths": {
     "/hello": {
-      "post": {
+      "get": {
         "summary": "hello",
         "description": "",
-        "operationId": "hello.post.hello",
+        "operationId": "hello.get.hello",
         "consumes": [
           "application/json"
         ],
@@ -36,7 +36,15 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "name",
+            "type": "string",
+            "description": "Name of the uploading file.",
+            "required": true
+          }
+        ],
         "responses": {
           "200": {
             "description": "200 response"
