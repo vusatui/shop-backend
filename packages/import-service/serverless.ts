@@ -2,6 +2,8 @@ import type {AWS} from '@serverless/typescript';
 
 import hello from '@functions/hello';
 import importProductsFile from '@functions/importProductsFile';
+import importFileParser from "@functions/importFileParser";
+
 import {AWS_REGION, CORS_ORIGINS, S3_UPLOADS_BUCKET_NAME} from "./src/constants";
 
 const serverlessConfiguration: AWS = {
@@ -29,6 +31,8 @@ const serverlessConfiguration: AWS = {
                 Effect: 'Allow',
                 Action: [
                     's3:PutObject',
+                    's3:GetObject',
+                    's3:DeleteObject',
                 ],
                 Resource: `arn:aws:s3:::${S3_UPLOADS_BUCKET_NAME}/*`,
             }
@@ -37,6 +41,7 @@ const serverlessConfiguration: AWS = {
     functions: {
         hello,
         importProductsFile,
+        importFileParser,
     },
     resources: {
         Resources: {
@@ -66,27 +71,28 @@ const serverlessConfiguration: AWS = {
                     }
                 }
             },
-            UploadsBucketPolicy: {
-                Type: 'AWS::S3::BucketPolicy',
-                Properties: {
-                    PolicyDocument: {
-                        Statement: [
-                            {
-                                Sid: 'PublicReadForGetBucketObjects',
-                                Effect: 'Allow',
-                                Principal: '*',
-                                Action: [
-                                    's3:PutObject',
-                                ],
-                                Resource: `arn:aws:s3:::${S3_UPLOADS_BUCKET_NAME}/*`,
-                            }
-                        ]
-                    },
-                    Bucket: {
-                        Ref: 'UploadsS3Bucket'
-                    }
-                }
-            }
+            // UploadsBucketPolicy: {
+            //     Type: 'AWS::S3::BucketPolicy',
+            //     Properties: {
+            //         PolicyDocument: {
+            //             Statement: [
+            //                 {
+            //                     Sid: 'PublicReadForGetBucketObjects',
+            //                     Effect: 'Allow',
+            //                     Principal: '*',
+            //                     Action: [
+            //                         's3:PutObject',
+            //                         's3:GetObject',
+            //                     ],
+            //                     Resource: `arn:aws:s3:::${S3_UPLOADS_BUCKET_NAME}/*`,
+            //                 }
+            //             ]
+            //         },
+            //         Bucket: {
+            //             Ref: 'UploadsS3Bucket'
+            //         }
+            //     }
+            // }
         },
     },
     outputs: {
