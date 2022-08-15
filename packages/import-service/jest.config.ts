@@ -76,19 +76,22 @@ export default {
   // ],
 
   // An array of file extensions your modules use
-  // moduleFileExtensions: [
-  //   "js",
+  moduleFileExtensions: [
+    "js",
   //   "mjs",
   //   "cjs",
   //   "jsx",
-  //   "ts",
+    "ts",
   //   "tsx",
   //   "json",
   //   "node"
-  // ],
+  ],
 
   // A map from regular expressions to module names or to arrays of module names that allow to stub out resources with a single module
-  // moduleNameMapper: {},
+  moduleNameMapper: {
+    "^@functions(.*)$": "<rootDir>/src/functions$1",
+    "^@libs(.*)$": "<rootDir>/src/libs$1",
+  },
 
   // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader
   // modulePathIgnorePatterns: [],
@@ -135,7 +138,7 @@ export default {
   // setupFiles: [],
 
   // A list of paths to modules that run some code to configure or set up the testing framework before each test
-  setupFilesAfterEnv: [ "./jest.setup.ts" ],
+  // setupFilesAfterEnv: [],
 
   // The number of seconds after which a test is considered as slow and reported as such in the results.
   // slowTestThreshold: 5,

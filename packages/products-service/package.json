@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Products service made on top of AWS Lambda Functions.",
   "main": "handler.ts",
+  "directories": {
+    "test": "__tests__"
+  },
   "scripts": {
     "sls:dev": "sls offline start",
     "sls:deploy": "sls deploy",
