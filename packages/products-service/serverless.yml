@@ -17,7 +17,7 @@ custom:
 
 provider:
   name: aws
-  runtime: nodejs12.x
+  runtime: nodejs16.x
   stage: dev
   region: eu-west-1
   environment:
@@ -33,6 +33,15 @@ provider:
       - subnet-0a253c49dd5b01847
       - subnet-042df5f146ec75e75
       - subnet-09b897b8965f500ec
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - sqs:ReceiveMessage
+      Resource:
+        Fn::GetAtt:
+          - catalogItemsQueue
+          - Arn
+
 
 plugins:
   - serverless-auto-swagger
@@ -81,3 +90,22 @@ functions:
           summary: "Create product"
           description: "Create a new product with initial stock count"
           bodyType: 'Product'
+
+  catalogBatchProcess:
+    handler: handler.catalogBatchProcess
+    events:
+      - sqs:
+          displayName: catalogBatchProcess
+          batchSize: 5
+          arn:
+            Fn::GetAtt:
+              - catalogItemsQueue
+              - Arn
+
+resources:
+  Resources:
+    catalogItemsQueue:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: catalogItemsQueue
+        ReceiveMessageWaitTimeSeconds: 20
