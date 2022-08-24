@@ -5,6 +5,7 @@ const webpack = require('webpack');
 module.exports = {
     mode: slsw.lib.webpack.isLocal ? 'development' : 'production',
     entry: slsw.lib.entries,
+    externals: [{ "aws-sdk": "commonjs aws-sdk" }, "aws-lambda"],
     resolve: {
         extensions: ['.js', '.ts']
     },

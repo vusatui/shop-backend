@@ -21,11 +21,18 @@ provider:
   stage: dev
   region: eu-west-1
   environment:
+    AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
     PG_HOST: ${env:PG_HOST}
     PG_PORT: ${env:PG_PORT}
     PG_DATABASE: ${env:PG_DATABASE}
     PG_USERNAME: ${env:PG_USERNAME}
     PG_PASSWORD: ${env:PG_PASSWORD}
+    SNS_REGION: ${env:SNS_REGION}
+    SNS_ADMIN_EMAIL: ${env:SNS_ADMIN_EMAIL}
+    SQS_QUEUE_URL:
+      Ref: catalogItemsQueue
+    SNS_TOPIC_ARN:
+      Ref: CatalogNotificationTopic
   vpc:
     securityGroupIds:
       - sg-0638cef869c004839
@@ -36,11 +43,16 @@ provider:
   iamRoleStatements:
     - Effect: Allow
       Action:
-        - sqs:ReceiveMessage
+        - sqs:*
       Resource:
         Fn::GetAtt:
           - catalogItemsQueue
           - Arn
+    - Effect: Allow
+      Action:
+        - sns:*
+      Resource:
+        Ref: CatalogNotificationTopic
 
 
 plugins:
@@ -69,6 +81,9 @@ functions:
 
   getProductsList:
     handler: handler.getProductsList
+    vpc:
+      securityGroupIds:
+        - sg-0638cef869c004839
     events:
       - http:
           path: /products
@@ -93,9 +108,9 @@ functions:
 
   catalogBatchProcess:
     handler: handler.catalogBatchProcess
+    timeout: 30
     events:
       - sqs:
-          displayName: catalogBatchProcess
           batchSize: 5
           arn:
             Fn::GetAtt:
@@ -109,3 +124,16 @@ resources:
       Properties:
         QueueName: catalogItemsQueue
         ReceiveMessageWaitTimeSeconds: 20
+
+    CatalogNotificationTopic:
+      Type: AWS::SNS::Topic
+      Properties:
+        TopicName: CatalogNotificationTopic
+
+    catalogNotificationTopicSubscription:
+      Type: AWS::SNS::Subscription
+      Properties:
+        Endpoint: ${env:SNS_ADMIN_EMAIL}
+        Protocol: email
+        TopicArn:
+          Ref: CatalogNotificationTopic

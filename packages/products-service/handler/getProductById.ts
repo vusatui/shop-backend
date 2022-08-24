@@ -9,25 +9,27 @@ import stringify from "../util/stringify";
 import logRequest from "../middleware/logRequest";
 import iterceptError from "../middleware/interceptError";
 import cors from "../middleware/cors";
+import Database from "../db";
 
-const productService = Container.get(ProductsService);
-const errorHandlerService =  Container.get(ErrorHandlerService);
-
-export default cors(iterceptError(logRequest(async (event: APIGatewayProxyEventV2) => {
+export const getProductById = (db: Database, productService: ProductsService, errorHandlerService: ErrorHandlerService) => async (event: APIGatewayProxyEventV2) => {
+    await db.init();
     const { id: productId } = event.pathParameters as APIGatewayProxyEventPathParameters;
-
     if (productId === undefined) {
         return ErrorHandlerService.getBadRequestResponse();
     }
 
-    try {
-        return {
-            statusCode: 200,
-            body: stringify({
-                item: await productService.getProductById(productId),
-            }),
-        };
-    } catch (e) {
-        return errorHandlerService.handleError(e as Error);
-    }
-})));
+    return {
+        statusCode: 200,
+        body: stringify({
+            item: await productService.getProductById(productId),
+        }),
+    };
+};
+
+export default cors(
+    iterceptError(
+        logRequest(
+            getProductById(Container.get(Database), Container.get(ProductsService), Container.get(ErrorHandlerService))
+        )
+    )
+);

@@ -4,7 +4,7 @@ import hello from '@functions/hello';
 import importProductsFile from '@functions/importProductsFile';
 import importFileParser from "@functions/importFileParser";
 
-import {AWS_REGION, CORS_ORIGINS, S3_UPLOADS_BUCKET_NAME} from "./src/constants";
+import {AWS_REGION, CORS_ORIGINS, S3_UPLOADS_BUCKET_NAME, SQS_NAME} from "./src/constants";
 
 const serverlessConfiguration: AWS = {
     service: 'import-service',
@@ -35,7 +35,15 @@ const serverlessConfiguration: AWS = {
                     's3:DeleteObject',
                 ],
                 Resource: `arn:aws:s3:::${S3_UPLOADS_BUCKET_NAME}/*`,
-            }
+            },
+            {
+                Effect: 'Allow',
+                Action: [
+                    'sqs:SendMessage',
+                    'sqs:GetQueueUrl',
+                ],
+                Resource: `arn:aws:sqs:eu-west-1:320296196045:${SQS_NAME}`
+            },
         ],
     },
     functions: {
@@ -71,28 +79,6 @@ const serverlessConfiguration: AWS = {
                     }
                 }
             },
-            // UploadsBucketPolicy: {
-            //     Type: 'AWS::S3::BucketPolicy',
-            //     Properties: {
-            //         PolicyDocument: {
-            //             Statement: [
-            //                 {
-            //                     Sid: 'PublicReadForGetBucketObjects',
-            //                     Effect: 'Allow',
-            //                     Principal: '*',
-            //                     Action: [
-            //                         's3:PutObject',
-            //                         's3:GetObject',
-            //                     ],
-            //                     Resource: `arn:aws:s3:::${S3_UPLOADS_BUCKET_NAME}/*`,
-            //                 }
-            //             ]
-            //         },
-            //         Bucket: {
-            //             Ref: 'UploadsS3Bucket'
-            //         }
-            //     }
-            // }
         },
     },
     outputs: {
